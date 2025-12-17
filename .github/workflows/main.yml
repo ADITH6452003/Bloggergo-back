@@ -27,7 +27,7 @@ jobs:
               git clone https://github.com/ADITH6452003/Bloggergo-back.git
             fi
 
-            cd backend-sece-Aiml || exit 1
+            cd Bloggergo-back || exit 1
             git pull origin master
 
             echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
