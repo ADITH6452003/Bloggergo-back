@@ -20,6 +20,8 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
+          timeout: 30s
+          command_timeout: 10m
           script: |
             cd /home/ubuntu || exit 1
 
