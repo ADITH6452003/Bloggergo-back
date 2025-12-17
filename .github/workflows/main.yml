@@ -24,11 +24,11 @@ jobs:
             cd /home/ubuntu || exit 1
 
             if [ ! -d "Bloggergo-back" ]; then
-              git clone h https://github.com/ADITH6452003/Bloggergo-back.git
+              git clone https://github.com/ADITH6452003/Bloggergo-back.git
             fi
 
             cd Bloggergo-back || exit 1
-            git pull origin master
+            git pull origin main
 
             echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
             echo "PORT=5000" >> .env
