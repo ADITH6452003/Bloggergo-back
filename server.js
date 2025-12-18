@@ -32,6 +32,11 @@ app.use((req, res, next) => {
   next()
 })
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() })
+})
+
 // Routes
 app.use('/api', authRoutes)
 app.use('/api/blogs', blogRoutes)
