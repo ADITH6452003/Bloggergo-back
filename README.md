@@ -93,4 +93,4 @@ PORT=5000
 - content (String, required)
 - author (ObjectId, ref: User)
 - createdAt (Date, default: now)
-- lastUpdated (Date, default: now)
+- lastUpdated (Date, default: now)# Trigger redeploy
