@@ -43,6 +43,17 @@ const auth = require('./middleware/auth')
 const { getStats } = require('./controllers/blogController')
 app.get('/api/stats', auth, getStats)
 
+// Health check endpoint
+app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }))
+
+// Keep-alive ping to prevent Render free tier from sleeping
+const BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 5000}`
+setInterval(() => {
+  fetch(`${BACKEND_URL}/health`)
+    .then(() => console.log('Keep-alive ping sent'))
+    .catch(err => console.error('Keep-alive ping failed:', err.message))
+}, 14 * 60 * 1000) // every 14 minutes
+
 const PORT = process.env.PORT || 5000
 app.listen(PORT, (err) => {
   if (err) {
