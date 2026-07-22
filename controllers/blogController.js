@@ -9,6 +9,20 @@ const getUserBlogs = async (req, res) => {
   }
 }
 
+const getBlogById = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id).populate('author', 'username email')
+
+    if (!blog) {
+      return res.status(404).json({ message: 'Blog not found' })
+    }
+
+    res.json(blog)
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
+}
+
 const searchBlogs = async (req, res) => {
   try {
     const { query } = req.query
@@ -156,4 +170,4 @@ const getAuthors = async (req, res) => {
   }
 }
 
-module.exports = { getUserBlogs, createBlog, updateBlog, deleteBlog, getStats, searchBlogs, getAuthors }
+module.exports = { getUserBlogs, getBlogById, createBlog, updateBlog, deleteBlog, getStats, searchBlogs, getAuthors }
