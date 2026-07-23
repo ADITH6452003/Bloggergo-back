@@ -26,23 +26,25 @@ const getBlogById = async (req, res) => {
 const searchBlogs = async (req, res) => {
   try {
     const { query } = req.query
+    if (!query || !query.trim()) return res.json([])
+
     const User = require('../models/User')
-    
-    // Find users by username
-    const users = await User.find({ 
-      username: { $regex: query, $options: 'i' } 
-    }).select('_id username')
-    
-    if (users.length === 0) {
-      return res.json([])
-    }
-    
-    // Find blogs by these users
-    const userIds = users.map(user => user._id)
-    const blogs = await Blog.find({ author: { $in: userIds } })
+    const regex = { $regex: query, $options: 'i' }
+
+    // Search by title/content OR by author username
+    const users = await User.find({ username: regex }).select('_id')
+    const userIds = users.map(u => u._id)
+
+    const blogs = await Blog.find({
+      $or: [
+        { title: regex },
+        { content: regex },
+        ...(userIds.length ? [{ author: { $in: userIds } }] : [])
+      ]
+    })
       .populate('author', 'username email')
       .sort({ createdAt: -1 })
-    
+
     res.json(blogs)
   } catch (error) {
     res.status(400).json({ message: error.message })
